@@ -25,7 +25,7 @@ class GuildOracle(nn.Module):
     Architecture : MLP compact avec BatchNorm, Dropout et activation moderne
     """
 
-    def __init__(self, input_dim: int = 8, hidden_dim: int = 16, num_layers: int = 3, dropout: float = 0.3):
+    def __init__(self, input_dim: int = 8, hidden_dim: int = 8, num_layers: int = 3, dropout: float = 0.3):
         super().__init__()
         
         layers = []
