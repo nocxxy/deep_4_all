@@ -29,13 +29,13 @@ print("Expression : L = (a * b + 1)^2")
 
 # --- MICROGRAD ---
 a_mg = Value(2.0)
-b_mg = Value(3.0)
+b_mg = Value(-3.0)
 L_mg = (a_mg * b_mg + 1) ** 2
 L_mg.backward()
 
 # --- PYTORCH ---
-a_pt = torch.tensor([2.0])
-b_pt = torch.tensor([3.0], requires_grad=True)
+a_pt = torch.tensor([2.0], requires_grad=True)
+b_pt = torch.tensor([-3.0], requires_grad=True)
 L_pt = (a_pt * b_pt + 1) ** 2
 L_pt.backward()
 

@@ -1,5 +1,9 @@
+<<<<<<< Updated upstream
 import math
 
+=======
+from math import exp
+>>>>>>> Stashed changes
 
 class Value:
     """
@@ -62,8 +66,8 @@ class Value:
             derivee_locale_other = self.data  # dz/dy = x
 
             # Application de la Chain Rule
-            self.grad += grad_externe * derivee_locale_self
-            other.grad += grad_externe * derivee_locale_other
+            self.grad += grad_externe * derivee_locale_other
+            other.grad += grad_externe * derivee_locale_self
 
         out._backward = _backward
         return out
@@ -114,6 +118,7 @@ class Value:
         return out
 
     # ==========================================================================
+<<<<<<< Updated upstream
     # 5. ACTIVATION SIGMOID : z = 1 / (1 + e^(-x))
     # ==========================================================================
     def sigmoid(self):
@@ -152,6 +157,28 @@ class Value:
         # 4. Retourner le noeud de sortie
 
         raise NotImplementedError("TODO: Implementer log()")
+=======
+    # 5. ACTIVATION Sigmoid : z = 1 / (1 + exp(-x))
+    # ==========================================================================
+    def sigmoid(self):
+        # Version numériquement stable pour éviter overflow
+        sigmoid = 1 / (1 + exp(-self.data))
+        
+        # Forward
+        out = Value(sigmoid, (self,), 'Sigmoid')
+
+        def _backward():
+            # --- MATHÉMATIQUES ---
+            # dz/dx = sigmoid(x) * (1 - sigmoid(x))
+
+            grad_externe = out.grad
+            derivee_locale = sigmoid * (1 - sigmoid)
+
+            self.grad += grad_externe * derivee_locale
+
+        out._backward = _backward
+        return out
+>>>>>>> Stashed changes
 
     # ==========================================================================
     # MOTEUR DE RÉTROPROPAGATION (Backpropagation Engine)

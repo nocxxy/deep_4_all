@@ -20,21 +20,36 @@ import torch.nn as nn
 
 class GuildOracle(nn.Module):
     """
-    Modèle baseline pour prédire la survie des aventuriers.
+    Modèle optimisé pour prédire la survie des aventuriers.
 
-    Architecture : MLP profond (trop profond !)
+    Architecture : MLP compact avec BatchNorm, Dropout et activation moderne
     """
 
-    def __init__(self, input_dim: int = 8, hidden_dim: int = 256, num_layers: int = 5):
-        """
-        Args:
-            input_dim: Nombre de features (8 stats)
-            hidden_dim: Dimension des couches cachées
-            num_layers: Nombre de couches cachées
-        """
+    def __init__(self, input_dim: int = 8, hidden_dim: int = 16, num_layers: int = 3, dropout: float = 0.3):
         super().__init__()
-        # TODO
-        self.network = nn.Sequential()
+        
+        layers = []
+        layers.extend([
+            nn.Linear(input_dim, hidden_dim),
+            nn.BatchNorm1d(hidden_dim),
+            nn.GELU(),
+            nn.Dropout(dropout)
+        ])
+        
+        for i in range(num_layers - 1):
+            layers.extend([
+                nn.Linear(hidden_dim, hidden_dim),
+                nn.BatchNorm1d(hidden_dim),
+                nn.GELU(),
+                nn.Dropout(dropout)
+            ])
+        
+        layers.extend([
+            nn.LayerNorm(hidden_dim),
+            nn.Linear(hidden_dim, 1)
+        ])
+        
+        self.network = nn.Sequential(*layers)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -58,7 +73,6 @@ class GuildOracle(nn.Module):
         """Retourne les prédictions binaires."""
         proba = self.predict_proba(x)
         return (proba > 0.5).float()
-
 
 # ============================================================================
 # TP3 : Modèle LSTM pour séquences de donjon
