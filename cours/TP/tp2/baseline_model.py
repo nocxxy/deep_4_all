@@ -135,10 +135,10 @@ class DungeonOracle(nn.Module):
         self.solo_embeddings = nn.Sequential(
                 nn.Flatten(),
                 nn.Linear(max_length * embed_dim, hidden_dim),
-                nn.ReLU(),
+                nn.GELU(),
                 nn.Dropout(dropout),
                 nn.Linear(hidden_dim, hidden_dim),
-                nn.ReLU(),
+                nn.GELU(),
                 nn.Dropout(dropout),
                 nn.Linear(hidden_dim, 1)  # Sortie directe pour comparaison
                 )
